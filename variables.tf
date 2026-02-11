@@ -50,7 +50,7 @@ EOT
     resource_group_name = string
     scopes              = set(string)
     description         = optional(string)
-    enabled             = optional(bool, true)
+    enabled             = optional(bool) # Default: true
     tags                = optional(map(string))
     criteria = object({
       caller                  = optional(string)
