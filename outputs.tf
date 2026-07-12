@@ -1,3 +1,7 @@
+output "monitor_activity_log_alerts_id" {
+  description = "Map of id values across all monitor_activity_log_alerts, keyed the same as var.monitor_activity_log_alerts"
+  value       = { for k, v in azurerm_monitor_activity_log_alert.monitor_activity_log_alerts : k => v.id }
+}
 output "monitor_activity_log_alerts_action" {
   description = "Map of action values across all monitor_activity_log_alerts, keyed the same as var.monitor_activity_log_alerts"
   value       = { for k, v in azurerm_monitor_activity_log_alert.monitor_activity_log_alerts : k => v.action }
