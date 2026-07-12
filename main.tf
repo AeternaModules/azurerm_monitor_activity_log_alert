@@ -49,7 +49,7 @@ resource "azurerm_monitor_activity_log_alert" "monitor_activity_log_alerts" {
   }
 
   dynamic "action" {
-    for_each = each.value.action != null ? [each.value.action] : []
+    for_each = each.value.action != null ? each.value.action : []
     content {
       action_group_id    = action.value.action_group_id
       webhook_properties = action.value.webhook_properties
