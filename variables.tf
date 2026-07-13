@@ -89,128 +89,254 @@ EOT
       webhook_properties = optional(map(string))
     })))
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_monitor_activity_log_alert's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: resource_group_name
-  #   condition: length(value) <= 90
-  #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
-  #   source:    [from resourcegroups.ValidateName: invalid when len(value) > 90]
-  # path: resource_group_name
-  #   condition: !endswith(value, ".")
-  #   message:   [from resourcegroups.ValidateName: must not end with "."]
-  #   source:    [from resourcegroups.ValidateName: must not end with "."]
-  # path: resource_group_name
-  #   condition: length(value) != 0
-  #   message:   [from resourcegroups.ValidateName: invalid when len(value) == 0]
-  #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
-  # path: resource_group_name
-  #   source:    [from resourcegroups.ValidateName] !matched
-  # path: location
-  #   source:    location.EnhancedValidate: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
-  # path: scopes[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.category
-  #   condition: contains(["Administrative", "Autoscale", "Policy", "Recommendation", "ResourceHealth", "Security", "ServiceHealth"], value)
-  #   message:   must be one of: Administrative, Autoscale, Policy, Recommendation, ResourceHealth, Security, ServiceHealth
-  # path: criteria.operation_name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.caller
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.level
-  #   condition: contains(["Verbose", "Informational", "Warning", "Error", "Critical"], value)
-  #   message:   must be one of: Verbose, Informational, Warning, Error, Critical
-  # path: criteria.levels[*]
-  #   condition: contains(["Verbose", "Informational", "Warning", "Error", "Critical"], value)
-  #   message:   must be one of: Verbose, Informational, Warning, Error, Critical
-  # path: criteria.resource_provider
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_providers[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_type
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_types[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_group
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_groups[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_id
-  #   source:    [from azure.ValidateResourceID] !ok
-  # path: criteria.resource_id
-  #   source:    [from azure.ValidateResourceID] err != nil
-  # path: criteria.resource_ids[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.status
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.statuses[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.sub_status
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.sub_statuses[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.recommendation_category
-  #   condition: contains(["Cost", "Reliability", "OperationalExcellence", "Performance", "HighAvailability", "Security"], value)
-  #   message:   must be one of: Cost, Reliability, OperationalExcellence, Performance, HighAvailability, Security
-  # path: criteria.recommendation_impact
-  #   condition: contains(["High", "Medium", "Low"], value)
-  #   message:   must be one of: High, Medium, Low
-  # path: criteria.recommendation_type
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.resource_health.current[*]
-  #   condition: contains(["Available", "Degraded", "Unavailable", "Unknown"], value)
-  #   message:   must be one of: Available, Degraded, Unavailable, Unknown
-  # path: criteria.resource_health.previous[*]
-  #   condition: contains(["Available", "Degraded", "Unavailable", "Unknown"], value)
-  #   message:   must be one of: Available, Degraded, Unavailable, Unknown
-  # path: criteria.resource_health.reason[*]
-  #   condition: contains(["PlatformInitiated", "UserInitiated", "Unknown"], value)
-  #   message:   must be one of: PlatformInitiated, UserInitiated, Unknown
-  # path: criteria.service_health.events[*]
-  #   condition: contains(["Incident", "Maintenance", "Informational", "ActionRequired", "Security"], value)
-  #   message:   must be one of: Incident, Maintenance, Informational, ActionRequired, Security
-  # path: criteria.service_health.locations[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: criteria.service_health.services[*]
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: action.action_group_id
-  #   source:    [from azure.ValidateResourceID] !ok
-  # path: action.action_group_id
-  #   source:    [from azure.ValidateResourceID] err != nil
-  # path: tags
-  #   condition: length(value) <= 50
-  #   message:   [from tags.Validate: invalid when len(value) > 50]
-  #   source:    [from tags.Validate: invalid when len(value) > 50]
-  # path: tags
-  #   condition: length(value) <= 512
-  #   message:   [from tags.Validate: invalid when len(value) > 512]
-  #   source:    [from tags.Validate: invalid when len(value) > 512]
-  # path: tags
-  #   source:    [from tags.Validate] err != nil
-  # path: tags
-  #   condition: length(value) <= 256
-  #   message:   [from tags.Validate: invalid when len(value) > 256]
-  #   source:    [from tags.Validate: invalid when len(value) > 256]
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        length(v.name) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        length(v.resource_group_name) <= 90
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: invalid when len(value) > 90]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        !endswith(v.resource_group_name, ".")
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: must not end with \".\"]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        length(v.resource_group_name) != 0
+      )
+    ])
+    error_message = "[from resourcegroups.ValidateName: invalid when len(value) == 0]"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        alltrue([for x in v.scopes : length(x) > 0])
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        contains(["Administrative", "Autoscale", "Policy", "Recommendation", "ResourceHealth", "Security", "ServiceHealth"], v.criteria.category)
+      )
+    ])
+    error_message = "must be one of: Administrative, Autoscale, Policy, Recommendation, ResourceHealth, Security, ServiceHealth"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.operation_name == null || (length(v.criteria.operation_name) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.caller == null || (length(v.criteria.caller) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.level == null || (contains(["Verbose", "Informational", "Warning", "Error", "Critical"], v.criteria.level))
+      )
+    ])
+    error_message = "must be one of: Verbose, Informational, Warning, Error, Critical"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.levels == null || (alltrue([for x in v.criteria.levels : contains(["Verbose", "Informational", "Warning", "Error", "Critical"], x)]))
+      )
+    ])
+    error_message = "must be one of: Verbose, Informational, Warning, Error, Critical"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_provider == null || (length(v.criteria.resource_provider) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_providers == null || (alltrue([for x in v.criteria.resource_providers : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_type == null || (length(v.criteria.resource_type) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_types == null || (alltrue([for x in v.criteria.resource_types : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_group == null || (length(v.criteria.resource_group) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_groups == null || (alltrue([for x in v.criteria.resource_groups : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_ids == null || (alltrue([for x in v.criteria.resource_ids : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.status == null || (length(v.criteria.status) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.statuses == null || (alltrue([for x in v.criteria.statuses : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.sub_status == null || (length(v.criteria.sub_status) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.sub_statuses == null || (alltrue([for x in v.criteria.sub_statuses : length(x) > 0]))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.recommendation_category == null || (contains(["Cost", "Reliability", "OperationalExcellence", "Performance", "HighAvailability", "Security"], v.criteria.recommendation_category))
+      )
+    ])
+    error_message = "must be one of: Cost, Reliability, OperationalExcellence, Performance, HighAvailability, Security"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.recommendation_impact == null || (contains(["High", "Medium", "Low"], v.criteria.recommendation_impact))
+      )
+    ])
+    error_message = "must be one of: High, Medium, Low"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.recommendation_type == null || (length(v.criteria.recommendation_type) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_health == null || (v.criteria.resource_health.current == null || (alltrue([for x in v.criteria.resource_health.current : contains(["Available", "Degraded", "Unavailable", "Unknown"], x)])))
+      )
+    ])
+    error_message = "must be one of: Available, Degraded, Unavailable, Unknown"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_health == null || (v.criteria.resource_health.previous == null || (alltrue([for x in v.criteria.resource_health.previous : contains(["Available", "Degraded", "Unavailable", "Unknown"], x)])))
+      )
+    ])
+    error_message = "must be one of: Available, Degraded, Unavailable, Unknown"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.resource_health == null || (v.criteria.resource_health.reason == null || (alltrue([for x in v.criteria.resource_health.reason : contains(["PlatformInitiated", "UserInitiated", "Unknown"], x)])))
+      )
+    ])
+    error_message = "must be one of: PlatformInitiated, UserInitiated, Unknown"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.service_health == null || (v.criteria.service_health.events == null || (alltrue([for x in v.criteria.service_health.events : contains(["Incident", "Maintenance", "Informational", "ActionRequired", "Security"], x)])))
+      )
+    ])
+    error_message = "must be one of: Incident, Maintenance, Informational, ActionRequired, Security"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.service_health == null || (v.criteria.service_health.locations == null || (alltrue([for x in v.criteria.service_health.locations : length(x) > 0])))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.criteria.service_health == null || (v.criteria.service_health.services == null || (alltrue([for x in v.criteria.service_health.services : length(x) > 0])))
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.monitor_activity_log_alerts : (
+        v.tags == null || (length(v.tags) <= 50)
+      )
+    ])
+    error_message = "[from tags.Validate: invalid when len(value) > 50]"
+  }
+  # Note: 9 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
